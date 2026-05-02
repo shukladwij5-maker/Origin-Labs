@@ -1,0 +1,407 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700&display=swap');
+
+:root {
+    --bg-dark: #050507;
+    --text-main: #d0d0d5;
+    --text-muted: #555560;
+    --neon-blue: #00d4ff;
+    --neon-green: #00ff66;
+    --circuit-color: rgba(0, 212, 255, 0.12);
+    --circuit-active: rgba(0, 212, 255, 0.8);
+    --transition-smooth: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    line-height: 1.7;
+    overflow-x: hidden;
+    cursor: none;
+}
+
+/* ===== Custom cursor — small neon dot ===== */
+#cursor-dot {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    background: var(--neon-blue);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: screen;
+    box-shadow: 0 0 12px var(--neon-blue), 0 0 30px rgba(0, 212, 255, 0.3);
+    transition: transform 0.1s ease, opacity 0.3s ease;
+}
+
+#cursor-ring {
+    position: fixed;
+    width: 32px;
+    height: 32px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transition: transform 0.15s ease, width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+}
+
+/* ===== Signal bar (scroll progress) ===== */
+#signal-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 2px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+    box-shadow: 0 0 10px var(--neon-blue);
+    z-index: 200;
+    transition: width 0.05s linear;
+}
+
+/* ===== Circuit SVG ===== */
+#main-circuit {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.circuit-backbone {
+    fill: none;
+    stroke: var(--circuit-color);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.circuit-backbone-glow {
+    fill: none;
+    stroke: var(--circuit-active);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 0 6px var(--neon-blue));
+}
+
+.circuit-dot {
+    fill: var(--bg-dark);
+    stroke: var(--circuit-color);
+    stroke-width: 1.5;
+    transition: all 0.6s ease;
+}
+
+.circuit-dot.lit {
+    stroke: var(--neon-blue);
+    fill: var(--neon-blue);
+    filter: drop-shadow(0 0 10px var(--neon-blue));
+}
+
+.circuit-pulse {
+    fill: none;
+    stroke: var(--neon-blue);
+    stroke-width: 1;
+    opacity: 0;
+}
+
+.circuit-pulse.active {
+    animation: pulse-ring 2.5s ease-out infinite;
+}
+
+@keyframes pulse-ring {
+    0%   { r: 6; opacity: 0.5; }
+    100% { r: 30; opacity: 0; }
+}
+
+/* Electron particle */
+.circuit-electron {
+    fill: #fff;
+    filter: drop-shadow(0 0 6px var(--neon-blue)) drop-shadow(0 0 12px var(--neon-green));
+}
+
+/* ===== Typography ===== */
+h1, h2, h3, .nav-logo { font-family: 'Outfit', sans-serif; color: #fff; }
+
+h1 {
+    font-size: clamp(2.2rem, 6vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.08;
+    margin-bottom: 2rem;
+    letter-spacing: -1px;
+}
+
+h2 {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+p {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 520px;
+}
+
+/* ===== Layout ===== */
+.flow-container {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== Navigation ===== */
+nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 1.2rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(5, 5, 7, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.nav-logo {
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--text-main);
+}
+
+.nav-links { display: flex; gap: 1.5rem; }
+
+.nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active { color: var(--neon-blue); }
+
+/* ===== Flow Nodes (Sections) ===== */
+.flow-node {
+    position: relative;
+    padding: 2rem 0 2rem 4rem;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.flow-node:first-child {
+    min-height: 100vh;
+    padding-top: 120px;
+}
+
+/* Node marker */
+.node-marker {
+    position: absolute;
+    left: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1.5px solid var(--circuit-color);
+    background: var(--bg-dark);
+    z-index: 2;
+    transition: all 0.6s ease;
+}
+
+.node-marker::after {
+    content: attr(data-label);
+    position: absolute;
+    left: -38px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    opacity: 0.3;
+    transition: opacity 0.5s ease;
+}
+
+.flow-node.in-view .node-marker {
+    border-color: var(--neon-blue);
+    background: var(--neon-blue);
+    box-shadow: 0 0 15px var(--neon-blue), 0 0 40px rgba(0, 212, 255, 0.2);
+}
+
+.flow-node.in-view .node-marker::after {
+    opacity: 1;
+    color: var(--neon-blue);
+}
+
+/* Vertical circuit line */
+.flow-node::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1.5px;
+    height: 100%;
+    background: var(--circuit-color);
+}
+
+.flow-node.in-view::before {
+    background: linear-gradient(to bottom, var(--circuit-active), var(--circuit-color));
+}
+
+/* ===== Product Nodes ===== */
+.product-node {
+    background: rgba(255, 255, 255, 0.015);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    padding: 2rem;
+    border-radius: 2px;
+    transition: var(--transition-smooth);
+    position: relative;
+}
+
+.product-node::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -4rem;
+    width: 4rem;
+    height: 1.5px;
+    background: var(--circuit-color);
+    transform: translateY(-50%);
+    transition: all 0.4s ease;
+}
+
+/* Small node dot where the branch meets the card */
+.product-node::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -8px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--circuit-color);
+    transform: translateY(-50%);
+    transition: all 0.4s ease;
+}
+
+.product-node:hover {
+    border-color: rgba(0, 212, 255, 0.2);
+    background: rgba(0, 212, 255, 0.02);
+}
+
+.product-node:hover::before {
+    background: var(--circuit-active);
+    box-shadow: 0 0 8px var(--neon-blue);
+}
+
+.product-node:hover::after {
+    background: var(--neon-blue);
+    box-shadow: 0 0 8px var(--neon-blue);
+}
+
+.status-tag {
+    display: inline-block;
+    font-size: 0.6rem;
+    font-weight: 800;
+    padding: 0.15rem 0.5rem;
+    border: 1px solid currentColor;
+    margin-bottom: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.status-ready { color: var(--neon-green); }
+.status-progress { color: rgba(0, 212, 255, 0.4); }
+
+/* ===== Minimal Button ===== */
+.btn-minimal {
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 2rem;
+    transition: var(--transition-smooth);
+    letter-spacing: 0.5px;
+}
+
+.btn-minimal:hover {
+    gap: 0.8rem;
+    color: var(--neon-blue);
+}
+
+/* ===== Text Reveal Animation (Hero only) ===== */
+.reveal-text {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: revealUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes revealUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== Stagger — scroll triggered ===== */
+.stagger {
+    opacity: 0;
+    transform: translateY(25px);
+    transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.stagger.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ===== Footer ===== */
+footer {
+    position: relative;
+    z-index: 1;
+    padding: 4rem 2rem;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 600px) {
+    body { cursor: auto; }
+    #cursor-dot, #cursor-ring { display: none; }
+    .nav-links { display: none; }
+    .flow-node { padding-left: 3rem; }
+    .node-marker { left: -12px; }
+    .node-marker::after { display: none; }
+    .product-node::before { width: 3rem; left: -3rem; }
+    .product-node::after { left: -6px; }
+}
