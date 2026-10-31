@@ -28,7 +28,7 @@
       const x = cx + Math.cos(angle + swirl) * r;
       const y = cy + Math.sin(angle + swirl) * r * .58;
       const warm = p.tint > .18;
-      ctx.fillStyle = warm ? `rgba(255,${170 + Math.round(p.tint * 55)},${89 + Math.round(p.tint * 65)},${p.alpha})` : `rgba(169,245,208,${p.alpha * .65})`;
+      ctx.fillStyle = warm ? `rgba(212,242,100,${p.alpha})` : `rgba(49,84,232,${p.alpha * .7})`;
       ctx.beginPath(); ctx.arc(x, y, p.size, 0, Math.PI * 2); ctx.fill();
     }
     if (!reduceMotion) frame = requestAnimationFrame(paint);
@@ -65,3 +65,4 @@
     nav.classList.remove('open'); toggle?.setAttribute('aria-expanded', 'false'); toggle?.setAttribute('aria-label', 'Open navigation');
   }));
 })();
+
